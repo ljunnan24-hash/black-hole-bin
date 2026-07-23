@@ -51,6 +51,9 @@ deleted. For development or a temporary run:
 open "dist/黑洞垃圾箱.app"
 ```
 
+To uninstall, quit the app, run `open "$HOME/Applications"` and move
+`黑洞垃圾箱.app` to Trash in Finder. This keeps removal visible and recoverable.
+
 > Source builds are ad-hoc signed for the current Mac. Do not download binaries
 > from third-party sites or disable Gatekeeper/remove quarantine attributes to
 > make one run. The official signed build will appear on this repository's

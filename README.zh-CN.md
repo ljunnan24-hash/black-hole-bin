@@ -49,6 +49,9 @@ git pull --ff-only
 open "dist/黑洞垃圾箱.app"
 ```
 
+卸载时，先退出应用，运行 `open "$HOME/Applications"`，然后在 Finder 中把
+`黑洞垃圾箱.app` 移到废纸篓。整个过程可见、可恢复。
+
 > 从源码生成的是本机 ad-hoc 签名版本。请不要从第三方站点下载所谓的安装包，也
 > 不要用关闭 Gatekeeper、删除隔离属性等方式绕过 macOS 安全检查。正式签名下载包
 > 会在本仓库的 [Releases](https://github.com/ljunnan24-hash/black-hole-bin/releases)
