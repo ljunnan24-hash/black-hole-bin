@@ -1,0 +1,64 @@
+name: Bug report
+description: Report a reproducible Black Hole Bin problem
+title: "[Bug]: "
+labels: ["bug"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Use a disposable file when reproducing drag/drop problems.
+  - type: input
+    id: macos
+    attributes:
+      label: macOS version
+      placeholder: macOS 15.5
+    validations:
+      required: true
+  - type: input
+    id: hardware
+    attributes:
+      label: Mac model
+      placeholder: MacBook Air M3
+    validations:
+      required: true
+  - type: input
+    id: source
+    attributes:
+      label: Drag source
+      description: Finder, Desktop, iCloud Drive, network volume, another app, etc.
+    validations:
+      required: true
+  - type: dropdown
+    id: hover
+    attributes:
+      label: Did the hover animation appear?
+      options:
+        - "Yes"
+        - "No"
+    validations:
+      required: true
+  - type: dropdown
+    id: suction
+    attributes:
+      label: Did the suction animation start after release?
+      options:
+        - "Yes"
+        - "No"
+    validations:
+      required: true
+  - type: textarea
+    id: steps
+    attributes:
+      label: Reproduction steps
+      placeholder: |
+        1. Launch the app
+        2. Drag ...
+        3. Release ...
+    validations:
+      required: true
+  - type: textarea
+    id: logs
+    attributes:
+      label: Relevant logs
+      description: Remove private paths or filenames before posting.
+      render: shell

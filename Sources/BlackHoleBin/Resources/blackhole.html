@@ -1,0 +1,205 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<style>
+html, body, canvas {
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  overflow: hidden;
+  background: transparent;
+}
+canvas { display: block; }
+</style>
+</head>
+<body>
+<canvas id="black-hole"></canvas>
+<script>
+(() => {
+  const report = (message) => {
+    try { window.webkit.messageHandlers.blackHoleLog.postMessage(String(message)); }
+    catch (_) {}
+  };
+
+  const canvas = document.getElementById("black-hole");
+  const gl = canvas.getContext("webgl2", {
+    alpha: true,
+    antialias: false,
+    depth: false,
+    stencil: false,
+    premultipliedAlpha: false,
+    preserveDrawingBuffer: false,
+    powerPreference: "high-performance"
+  });
+  if (!gl) {
+    report("WebGL 2 is unavailable");
+    return;
+  }
+
+  const vertexSource = `#version 300 es
+  in vec2 position;
+  void main() { gl_Position = vec4(position, 0.0, 1.0); }`;
+
+  const upstreamSource = __SHADER_JSON__;
+  const fragmentSource = `#version 300 es
+  precision highp float;
+  precision highp int;
+  uniform vec3 iResolution;
+  uniform float iTime;
+  uniform vec4 iDate;
+  uniform float iTimeCursorChange;
+  uniform vec4 iCurrentCursorColor;
+  uniform vec4 iPreviousCursorColor;
+  uniform sampler2D iChannel0;
+  uniform float uHover;
+  uniform vec2 uDrag;
+  uniform float uSuction;
+  uniform float uSuccess;
+  uniform float uError;
+  uniform float uMotionTime;
+  out vec4 outputColor;
+  ${upstreamSource}
+  void main() { mainImage(outputColor, gl_FragCoord.xy); }`;
+
+  function compile(type, source) {
+    const shader = gl.createShader(type);
+    gl.shaderSource(shader, source);
+    gl.compileShader(shader);
+    if (!gl.getShaderParameter(shader, gl.COMPILE_STATUS)) {
+      const log = gl.getShaderInfoLog(shader);
+      report(log);
+      throw new Error(log);
+    }
+    return shader;
+  }
+
+  let program;
+  try {
+    program = gl.createProgram();
+    gl.attachShader(program, compile(gl.VERTEX_SHADER, vertexSource));
+    gl.attachShader(program, compile(gl.FRAGMENT_SHADER, fragmentSource));
+    gl.linkProgram(program);
+    if (!gl.getProgramParameter(program, gl.LINK_STATUS)) {
+      throw new Error(gl.getProgramInfoLog(program));
+    }
+  } catch (error) {
+    report(error.message);
+    return;
+  }
+
+  gl.useProgram(program);
+  const buffer = gl.createBuffer();
+  gl.bindBuffer(gl.ARRAY_BUFFER, buffer);
+  gl.bufferData(
+    gl.ARRAY_BUFFER,
+    new Float32Array([-1, -1, 3, -1, -1, 3]),
+    gl.STATIC_DRAW
+  );
+  const position = gl.getAttribLocation(program, "position");
+  gl.enableVertexAttribArray(position);
+  gl.vertexAttribPointer(position, 2, gl.FLOAT, false, 0, 0);
+
+  const emptyTexture = gl.createTexture();
+  gl.activeTexture(gl.TEXTURE0);
+  gl.bindTexture(gl.TEXTURE_2D, emptyTexture);
+  gl.texImage2D(
+    gl.TEXTURE_2D, 0, gl.RGBA, 1, 1, 0,
+    gl.RGBA, gl.UNSIGNED_BYTE, new Uint8Array([0, 0, 0, 0])
+  );
+  gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR);
+  gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.LINEAR);
+
+  const uniforms = {};
+  [
+    "iResolution", "iTime", "iDate", "iTimeCursorChange",
+    "iCurrentCursorColor", "iPreviousCursorColor", "iChannel0",
+    "uHover", "uDrag", "uSuction", "uSuccess", "uError", "uMotionTime"
+  ].forEach(name => uniforms[name] = gl.getUniformLocation(program, name));
+  gl.uniform1i(uniforms.iChannel0, 0);
+  gl.uniform4f(uniforms.iCurrentCursorColor, 0, 0, 0, 0);
+  gl.uniform4f(uniforms.iPreviousCursorColor, 0, 0, 0, 0);
+  gl.uniform1f(uniforms.iTimeCursorChange, 0);
+
+  const state = {
+    hover: 0,
+    hoverTarget: 0,
+    dragX: 0,
+    dragY: 0,
+    reducedMotion: false,
+    suctionAt: -10,
+    successAt: -10,
+    errorAt: -10,
+    motionTime: 0,
+    previousTime: performance.now() / 1000
+  };
+
+  window.blackHoleSetInteraction = (hover, x, y) => {
+    state.hoverTarget = Math.max(0, Math.min(1, hover));
+    state.dragX = x;
+    state.dragY = y;
+  };
+  window.blackHoleSetReducedMotion = value => state.reducedMotion = !!value;
+  window.blackHolePulse = kind => {
+    const now = performance.now() / 1000;
+    if (kind === "suction") state.suctionAt = now;
+    if (kind === "success") state.successAt = now;
+    if (kind === "error") state.errorAt = now;
+  };
+
+  const envelope = (now, started, duration) => {
+    const progress = (now - started) / duration;
+    return progress >= 0 && progress <= 1 ? Math.sin(progress * Math.PI) : 0;
+  };
+
+  function resize() {
+    const scale = Math.min(window.devicePixelRatio || 1, 2);
+    const width = Math.max(1, Math.round(canvas.clientWidth * scale));
+    const height = Math.max(1, Math.round(canvas.clientHeight * scale));
+    if (canvas.width !== width || canvas.height !== height) {
+      canvas.width = width;
+      canvas.height = height;
+      gl.viewport(0, 0, width, height);
+    }
+  }
+
+  function frame(milliseconds) {
+    resize();
+    const now = milliseconds / 1000;
+    const delta = Math.min(Math.max(now - state.previousTime, 0), 0.1);
+    state.previousTime = now;
+    const response = 1 - Math.exp(-delta * 18);
+    state.hover += (state.hoverTarget - state.hover) * response;
+    const speed = state.reducedMotion
+      ? 0.12
+      : 0.26 + state.hover * 1.10;
+    state.motionTime += delta * speed;
+
+    const date = new Date();
+    gl.uniform3f(uniforms.iResolution, canvas.width, canvas.height, 1);
+    gl.uniform1f(uniforms.iTime, now);
+    gl.uniform4f(
+      uniforms.iDate,
+      date.getFullYear(), date.getMonth() + 1, date.getDate(),
+      date.getHours() * 3600 + date.getMinutes() * 60 + date.getSeconds()
+    );
+    gl.uniform1f(uniforms.uHover, state.hover);
+    gl.uniform2f(uniforms.uDrag, state.dragX, state.dragY);
+    gl.uniform1f(uniforms.uSuction, envelope(now, state.suctionAt, 0.96));
+    gl.uniform1f(uniforms.uSuccess, envelope(now, state.successAt, 0.82));
+    gl.uniform1f(uniforms.uError, envelope(now, state.errorAt, 0.68));
+    gl.uniform1f(uniforms.uMotionTime, state.motionTime);
+
+    gl.clearColor(0, 0, 0, 0);
+    gl.clear(gl.COLOR_BUFFER_BIT);
+    gl.drawArrays(gl.TRIANGLES, 0, 3);
+    requestAnimationFrame(frame);
+  }
+
+  report("ready");
+  requestAnimationFrame(frame);
+})();
+</script>
+</body>
+</html>
