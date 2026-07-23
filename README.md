@@ -12,8 +12,11 @@ Release it to spiral the item into the event horizon and safely move it to the
 macOS Trash.
 
 <p align="center">
-  <img src="docs/demo.gif" width="420" alt="Real Black Hole Bin suction animation">
+  <img src="docs/demo.gif" width="420" alt="Black Hole Bin idle, file-hover and real recycle animation">
 </p>
+
+The recording shows the real three-state flow: idle → file hover → release,
+suction and confirmed move to Trash. It uses one disposable text file.
 
 > **Current status: 0.1 preview for macOS only.** You can install from source
 > today. A signed and notarized download for non-developers is not available

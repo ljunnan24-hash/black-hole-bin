@@ -17,6 +17,8 @@ and this project follows [Semantic Versioning](https://semver.org/spec/v2.0.0.ht
 
 - Reworked English and Simplified Chinese onboarding around installation,
   first launch, safe usage and current preview limitations.
+- Added a dark backing to the drag-release hint so it remains legible on light
+  desktop backgrounds.
 
 ## [0.1.0] - 2026-07-23
 
