@@ -83,12 +83,20 @@ jobs:
           path: artifacts
           merge-multiple: true
 
+      - name: Prepare release assets and checksums
+        run: |
+          mkdir release-assets
+          find artifacts -type f -exec cp {} release-assets/ \;
+          cd release-assets
+          sha256sum * > SHA256SUMS.txt
+
       - name: Create GitHub release
         env:
           GH_TOKEN: ${{ github.token }}
         run: >-
           gh release create "${GITHUB_REF_NAME}"
-          artifacts/*
+          release-assets/*
           --repo "${GITHUB_REPOSITORY}"
           --title "Black Hole Bin ${GITHUB_REF_NAME}"
           --generate-notes
+          --prerelease

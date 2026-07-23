@@ -46,7 +46,8 @@ commit. A `v*` tag publishes the successful artifacts to GitHub Releases.
 4. Test the ARM64 installer on Windows on ARM hardware or a trusted VM.
 5. Create and push an annotated tag matching the versions in source.
 6. Confirm the release contains x64 `.exe`, x64 `.msi` and ARM64 `.exe`.
-7. State clearly that preview installers are unsigned until a code-signing
+7. Verify every asset against the generated `SHA256SUMS.txt`.
+8. State clearly that preview installers are unsigned until a code-signing
    certificate and protected CI secret are configured.
 
 ## Upstream submission

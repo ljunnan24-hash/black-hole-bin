@@ -44,8 +44,8 @@ Open the official
 [Releases page](https://github.com/ljunnan24-hash/black-hole-bin/releases) and
 download the installer for your device:
 
-- Most Intel/AMD PCs: `Black.Hole.Bin_*_x64-setup.exe`
-- Windows on ARM: `Black.Hole.Bin_*_arm64-setup.exe`
+- Most Intel/AMD PCs: `Black Hole Bin_*_x64-setup.exe`
+- Windows on ARM: `Black Hole Bin_*_arm64-setup.exe`
 - An x64 `.msi` is also published for managed or alternative installation
 
 Run the installer as the current user; administrator access is not required.
