@@ -91,7 +91,10 @@ jobs:
       - name: Prepare release assets and checksums
         run: |
           mkdir release-assets
-          find artifacts -type f -exec cp {} release-assets/ \;
+          while IFS= read -r -d '' file; do
+            filename="$(basename "$file")"
+            cp "$file" "release-assets/${filename// /.}"
+          done < <(find artifacts -type f -print0)
           cd release-assets
           sha256sum * > SHA256SUMS.txt
 
