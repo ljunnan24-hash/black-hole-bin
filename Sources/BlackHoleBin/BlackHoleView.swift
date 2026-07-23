@@ -14,6 +14,7 @@ final class BlackHoleView: NSView {
     weak var trashController: TrashController?
     var onStatusChange: ((String, StatusKind) -> Void)?
 
+    private let dropHintBackground = CALayer()
     private let dropHint = CATextLayer()
     private let toastBackground = CALayer()
     private let toastText = CATextLayer()
@@ -84,6 +85,13 @@ final class BlackHoleView: NSView {
         guard let root = layer else { return }
         root.masksToBounds = false
 
+        dropHintBackground.backgroundColor = NSColor.black.withAlphaComponent(0.72).cgColor
+        dropHintBackground.cornerRadius = 13
+        dropHintBackground.frame = CGRect(x: 23, y: 10, width: bounds.width - 46, height: 32)
+        dropHintBackground.opacity = 0
+        dropHintBackground.zPosition = 219
+        root.addSublayer(dropHintBackground)
+
         dropHint.string = "松手，送入黑洞"
         dropHint.font = NSFont.systemFont(ofSize: 13, weight: .semibold)
         dropHint.fontSize = 13
@@ -120,6 +128,7 @@ final class BlackHoleView: NSView {
     override func layout() {
         super.layout()
         renderer.webView.frame = bounds
+        dropHintBackground.frame = CGRect(x: 23, y: 10, width: bounds.width - 46, height: 32)
         dropHint.frame = CGRect(x: 42, y: 18, width: bounds.width - 84, height: 21)
         toastBackground.frame = CGRect(x: 23, y: 10, width: bounds.width - 46, height: 32)
         toastText.frame = CGRect(x: 8, y: 7, width: toastBackground.bounds.width - 16, height: 18)
@@ -455,14 +464,16 @@ final class BlackHoleView: NSView {
     }
 
     private func setDropHint(visible: Bool) {
-        dropHint.removeAllAnimations()
-        let fade = CABasicAnimation(keyPath: "opacity")
-        fade.fromValue = dropHint.presentation()?.opacity ?? dropHint.opacity
-        fade.toValue = visible ? 1 : 0
-        fade.duration = 0.16
-        fade.timingFunction = CAMediaTimingFunction(name: .easeOut)
-        dropHint.opacity = visible ? 1 : 0
-        dropHint.add(fade, forKey: "fade")
+        for layer in [dropHintBackground, dropHint] {
+            layer.removeAllAnimations()
+            let fade = CABasicAnimation(keyPath: "opacity")
+            fade.fromValue = layer.presentation()?.opacity ?? layer.opacity
+            fade.toValue = visible ? 1 : 0
+            fade.duration = 0.16
+            fade.timingFunction = CAMediaTimingFunction(name: .easeOut)
+            layer.opacity = visible ? 1 : 0
+            layer.add(fade, forKey: "fade")
+        }
     }
 
     private func configureAttractionRing(_ ring: CAShapeLayer) {
