@@ -7,3 +7,4 @@ cd "$project_dir"
 swift build -c release
 .build/release/BlackHoleBin --self-test
 plutil -lint Resources/Info.plist
+zsh -n Scripts/build-app.sh Scripts/install-local.sh

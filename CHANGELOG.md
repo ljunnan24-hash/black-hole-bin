@@ -7,7 +7,16 @@ and this project follows [Semantic Versioning](https://semver.org/spec/v2.0.0.ht
 
 ## [Unreleased]
 
-- Prepare the repository for public collaboration.
+### Added
+
+- Real in-app suction demo for the project README.
+- One-command local source installer for `~/Applications`.
+- Public roadmap covering trusted macOS distribution and a future Windows port.
+
+### Changed
+
+- Reworked English and Simplified Chinese onboarding around installation,
+  first launch, safe usage and current preview limitations.
 
 ## [0.1.0] - 2026-07-23
 
