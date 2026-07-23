@@ -11,8 +11,8 @@ Thanks for helping improve Black Hole Bin.
 
 A useful drag/drop report includes:
 
-- macOS version and Mac model
-- Finder or other source application
+- Operating system version, device model and x64/ARM64 architecture
+- Finder, File Explorer or other source application
 - File, folder, package, network volume or cloud-provider item
 - Whether the source and Trash are on the same volume
 - Relevant Console messages containing `BlackHoleBin`
@@ -27,7 +27,18 @@ cd black-hole-bin
 open "dist/黑洞垃圾箱.app"
 ```
 
-The project intentionally has no external package dependencies.
+For Windows development, use Windows 10/11 with Node.js 24, Rust stable and
+Visual Studio 2022 Build Tools:
+
+```powershell
+cd windows
+npm install
+npm run check
+npm run tauri dev
+```
+
+The macOS client has no external packages. Windows dependencies are locked in
+`package-lock.json` and `Cargo.lock` and updated by Dependabot.
 
 ## Pull requests
 
@@ -38,8 +49,10 @@ Keep pull requests focused. Describe:
 3. How it was tested, including recycle and undo.
 4. Any GPU or reduced-motion impact.
 
-Never replace `NSWorkspace.recycle` with permanent deletion. Changes to the
-drag fallback must preserve the `isProcessingDrop` duplicate-operation guard.
+Never replace `NSWorkspace.recycle` or the Windows `trash::delete_all` call
+with permanent deletion. Changes to either drag path must preserve the
+duplicate-operation guard. Windows changes must keep the all-paths-first
+validation and root-path rejection.
 
 ## Shader changes
 
@@ -51,6 +64,8 @@ geodesic integrator so future upstream comparisons remain practical.
 ## Style
 
 - Use Swift concurrency and AppKit APIs available on macOS 13.
+- Keep the Windows shell compatible with Windows 10 version 1803 and WebView2.
+- Run `npm run check` in `windows/` for Windows frontend or Rust changes.
 - Keep UI work on the main actor.
 - Avoid dependencies unless they remove substantially more code than they add.
 - Use native reduced-motion behavior for new animations.

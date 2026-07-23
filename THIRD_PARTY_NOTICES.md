@@ -28,6 +28,19 @@ wire the upstream Ghostty or Claude Code integrations.
 The application icon was created specifically for this project with OpenAI's
 image-generation tooling. It is distributed under this project's MIT license.
 
+## Windows runtime libraries
+
+The Windows client uses the following open-source Rust components:
+
+- [Tauri](https://github.com/tauri-apps/tauri), Apache-2.0 OR MIT
+- [Tauri window-state plugin](https://github.com/tauri-apps/plugins-workspace),
+  Apache-2.0 OR MIT
+- [`trash`](https://github.com/ArturKovacs/trash), MIT
+
+Exact direct and transitive versions are recorded in
+`windows/src-tauri/Cargo.lock`; frontend versions are recorded in
+`windows/package-lock.json`.
+
 ## Additional implementation references
 
 The desktop overlay behavior was informed by the MIT-licensed

@@ -1,0 +1,352 @@
+:root {
+  font-family:
+    "Segoe UI Variable", "Segoe UI", "Microsoft YaHei UI", system-ui, sans-serif;
+  color: #f7f8ff;
+  background: transparent;
+  font-synthesis: none;
+  user-select: none;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body,
+#app {
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  overflow: hidden;
+  background: transparent;
+}
+
+button {
+  color: inherit;
+  font: inherit;
+}
+
+#app {
+  position: relative;
+  isolation: isolate;
+}
+
+#renderer {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  width: 100%;
+  height: 100%;
+  border: 0;
+  pointer-events: none;
+}
+
+#drop-zone {
+  position: absolute;
+  inset: 9%;
+  z-index: 3;
+  border-radius: 50%;
+  cursor: default;
+  outline: none;
+}
+
+#drop-zone:focus-visible {
+  outline: 2px solid rgba(123, 214, 255, 0.9);
+  outline-offset: -14px;
+}
+
+#attraction-rings {
+  position: absolute;
+  inset: 14%;
+  z-index: 1;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 180ms ease;
+}
+
+#attraction-rings span {
+  position: absolute;
+  inset: 0;
+  border: 1px solid rgba(115, 207, 255, 0.74);
+  border-radius: 50%;
+  box-shadow:
+    0 0 13px rgba(98, 172, 255, 0.4),
+    inset 0 0 14px rgba(255, 173, 80, 0.18);
+  animation: ring-collapse 1.28s cubic-bezier(0.25, 0.72, 0.35, 1) infinite;
+}
+
+#attraction-rings span:nth-child(2) {
+  animation-delay: -0.64s;
+}
+
+.attracting #attraction-rings {
+  opacity: 1;
+}
+
+@keyframes ring-collapse {
+  from {
+    opacity: 0;
+    transform: scale(1.28);
+  }
+  28% {
+    opacity: 0.86;
+  }
+  to {
+    opacity: 0;
+    transform: scale(0.43);
+  }
+}
+
+#drag-handle,
+#menu-button {
+  position: absolute;
+  z-index: 10;
+  top: 12px;
+  width: 34px;
+  height: 28px;
+  display: grid;
+  place-content: center;
+  gap: 3px;
+  padding: 0;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 12px;
+  background: rgba(8, 12, 23, 0.5);
+  box-shadow: 0 5px 18px rgba(0, 0, 0, 0.22);
+  opacity: 0;
+  transition:
+    opacity 150ms ease,
+    background 150ms ease,
+    border-color 150ms ease;
+  backdrop-filter: blur(12px);
+}
+
+#app:hover #drag-handle,
+#app:hover #menu-button,
+#drag-handle:focus-visible,
+#menu-button:focus-visible {
+  opacity: 1;
+}
+
+#drag-handle {
+  left: calc(50% - 17px);
+  cursor: grab;
+}
+
+#drag-handle:active {
+  cursor: grabbing;
+}
+
+#menu-button {
+  right: 13px;
+  cursor: pointer;
+}
+
+#drag-handle:hover,
+#menu-button:hover {
+  border-color: rgba(119, 205, 255, 0.34);
+  background: rgba(17, 29, 48, 0.8);
+}
+
+#drag-handle span {
+  width: 14px;
+  height: 1px;
+  border-radius: 1px;
+  background: rgba(226, 235, 255, 0.72);
+}
+
+#menu-button span {
+  width: 3px;
+  height: 3px;
+  border-radius: 50%;
+  background: rgba(226, 235, 255, 0.82);
+}
+
+.hint,
+.status {
+  position: absolute;
+  z-index: 8;
+  left: 50%;
+  max-width: 86%;
+  padding: 7px 12px;
+  border: 1px solid rgba(255, 255, 255, 0.11);
+  border-radius: 999px;
+  color: rgba(247, 249, 255, 0.96);
+  background: rgba(5, 8, 15, 0.78);
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.34);
+  font-size: 12px;
+  font-weight: 600;
+  line-height: 1.3;
+  text-align: center;
+  white-space: nowrap;
+  opacity: 0;
+  pointer-events: none;
+  transform: translate(-50%, 7px);
+  transition:
+    opacity 160ms ease,
+    transform 160ms ease;
+  backdrop-filter: blur(14px);
+}
+
+.hint {
+  bottom: 25px;
+}
+
+.attracting .hint {
+  opacity: 1;
+  transform: translate(-50%, 0);
+}
+
+.status {
+  bottom: 22px;
+  white-space: normal;
+}
+
+.status.visible {
+  opacity: 1;
+  transform: translate(-50%, 0);
+}
+
+.status[data-kind="success"] {
+  border-color: rgba(78, 255, 164, 0.32);
+  color: #baffd8;
+}
+
+.status[data-kind="error"] {
+  border-color: rgba(255, 78, 78, 0.38);
+  color: #ffd1d1;
+}
+
+#particles {
+  position: absolute;
+  z-index: 6;
+  inset: 50%;
+  pointer-events: none;
+}
+
+.file-particle {
+  position: absolute;
+  width: 31px;
+  height: 39px;
+  margin: -20px 0 0 -16px;
+  border: 1px solid rgba(255, 255, 255, 0.68);
+  border-radius: 4px;
+  background:
+    linear-gradient(135deg, transparent 0 9px, rgba(255, 255, 255, 0.82) 9px 10px, transparent 10px)
+      top right / 11px 11px no-repeat,
+    linear-gradient(145deg, rgba(160, 220, 255, 0.96), rgba(70, 116, 255, 0.84));
+  box-shadow:
+    0 0 18px rgba(86, 172, 255, 0.74),
+    0 8px 20px rgba(0, 0, 0, 0.38);
+  animation: file-suction 0.88s cubic-bezier(0.62, 0.02, 0.74, 0.4) var(--delay) both;
+}
+
+.file-particle span {
+  position: absolute;
+  top: 43px;
+  left: 50%;
+  max-width: 88px;
+  overflow: hidden;
+  color: #f7f9ff;
+  font-size: 9px;
+  font-weight: 600;
+  text-overflow: ellipsis;
+  text-shadow: 0 1px 4px #000;
+  white-space: nowrap;
+  transform: translateX(-50%);
+}
+
+@keyframes file-suction {
+  from {
+    opacity: 0;
+    transform: translate(var(--from-x), var(--from-y)) rotate(0) scale(1);
+  }
+  13% {
+    opacity: 1;
+  }
+  72% {
+    opacity: 1;
+  }
+  to {
+    opacity: 0;
+    transform: translate(0, 0) rotate(var(--turn)) scale(0.035);
+  }
+}
+
+.menu {
+  position: absolute;
+  z-index: 20;
+  top: 47px;
+  right: 13px;
+  width: 174px;
+  padding: 6px;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 13px;
+  background: rgba(10, 14, 24, 0.92);
+  box-shadow: 0 14px 38px rgba(0, 0, 0, 0.48);
+  backdrop-filter: blur(18px);
+}
+
+.menu[hidden] {
+  display: none;
+}
+
+.menu button {
+  width: 100%;
+  min-height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 6px 9px;
+  border: 0;
+  border-radius: 8px;
+  background: transparent;
+  font-size: 12px;
+  text-align: left;
+  cursor: pointer;
+}
+
+.menu button:hover,
+.menu button:focus-visible {
+  outline: none;
+  background: rgba(105, 179, 255, 0.16);
+}
+
+.menu .check {
+  opacity: 0;
+}
+
+.menu button[aria-checked="true"] .check {
+  opacity: 1;
+}
+
+.separator {
+  height: 1px;
+  margin: 4px 7px;
+  background: rgba(255, 255, 255, 0.1);
+}
+
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+.reduced-motion #attraction-rings span {
+  animation-duration: 4s;
+}
+
+.reduced-motion .file-particle {
+  animation-duration: 180ms;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  #attraction-rings span {
+    animation-duration: 4s;
+  }
+}

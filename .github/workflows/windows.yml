@@ -1,0 +1,94 @@
+name: Windows
+
+on:
+  push:
+    branches: [main]
+    tags: ["v*"]
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    name: Build ${{ matrix.name }}
+    runs-on: windows-2025
+    timeout-minutes: 35
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - name: Windows x64
+            target: x86_64-pc-windows-msvc
+            bundles: nsis,msi
+            artifact: black-hole-bin-windows-x64
+          - name: Windows ARM64
+            target: aarch64-pc-windows-msvc
+            bundles: nsis
+            artifact: black-hole-bin-windows-arm64
+
+    defaults:
+      run:
+        working-directory: windows
+
+    steps:
+      - uses: actions/checkout@v7
+
+      - uses: actions/setup-node@v6
+        with:
+          node-version: 24
+          cache: npm
+          cache-dependency-path: windows/package-lock.json
+
+      - name: Install Rust
+        uses: dtolnay/rust-toolchain@stable
+        with:
+          targets: ${{ matrix.target }}
+
+      - name: Install frontend dependencies
+        run: npm ci
+
+      - name: Check shared renderer and frontend
+        run: npm run check:web
+
+      - name: Test Rust backend
+        run: cargo test --manifest-path src-tauri/Cargo.toml
+
+      - name: Build installers
+        run: npm run tauri build -- --target ${{ matrix.target }} --bundles ${{ matrix.bundles }}
+
+      - name: Upload installers
+        uses: actions/upload-artifact@v4
+        with:
+          name: ${{ matrix.artifact }}
+          path: |
+            windows/src-tauri/target/${{ matrix.target }}/release/bundle/**/*.exe
+            windows/src-tauri/target/${{ matrix.target }}/release/bundle/**/*.msi
+          if-no-files-found: error
+          retention-days: 14
+
+  release:
+    name: Publish Windows release
+    if: startsWith(github.ref, 'refs/tags/v')
+    needs: build
+    runs-on: ubuntu-24.04
+    permissions:
+      contents: write
+
+    steps:
+      - uses: actions/download-artifact@v5
+        with:
+          pattern: black-hole-bin-windows-*
+          path: artifacts
+          merge-multiple: true
+
+      - name: Create GitHub release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: >-
+          gh release create "${GITHUB_REF_NAME}"
+          artifacts/*
+          --repo "${GITHUB_REPOSITORY}"
+          --title "Black Hole Bin ${GITHUB_REF_NAME}"
+          --generate-notes

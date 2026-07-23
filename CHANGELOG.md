@@ -7,16 +7,22 @@ and this project follows [Semantic Versioning](https://semver.org/spec/v2.0.0.ht
 
 ## [Unreleased]
 
+## [0.2.0] - 2026-07-23
+
 ### Added
 
 - Real in-app suction demo for the project README.
 - One-command local source installer for `~/Applications`.
-- Public roadmap covering trusted macOS distribution and a future Windows port.
+- Tauri 2 Windows client with the shared WebGL renderer, bilingual interface,
+  drag/drop suction and validated system Recycle Bin operations.
+- Reproducible Windows x64 NSIS/MSI and ARM64 NSIS builds in GitHub Actions.
+- Automatic tagged Windows releases and weekly npm, Cargo and Actions updates.
+- Public roadmap covering trusted macOS and Windows distribution.
 
 ### Changed
 
 - Reworked English and Simplified Chinese onboarding around installation,
-  first launch, safe usage and current preview limitations.
+  first launch, platform differences, safe usage and current preview limitations.
 - Added a dark backing to the drag-release hint so it remains legible on light
   desktop backgrounds.
 
@@ -32,5 +38,6 @@ and this project follows [Semantic Versioning](https://semver.org/spec/v2.0.0.ht
 - Native drag-operation negotiation plus system drag-pasteboard fallback.
 - Local release build script and recycle/undo self-test.
 
-[Unreleased]: https://github.com/ljunnan24-hash/black-hole-bin/compare/v0.1.0...HEAD
+[Unreleased]: https://github.com/ljunnan24-hash/black-hole-bin/compare/v0.2.0...HEAD
+[0.2.0]: https://github.com/ljunnan24-hash/black-hole-bin/compare/v0.1.0...v0.2.0
 [0.1.0]: https://github.com/ljunnan24-hash/black-hole-bin/releases/tag/v0.1.0

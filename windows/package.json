@@ -1,0 +1,22 @@
+{
+  "name": "black-hole-bin-windows",
+  "private": true,
+  "version": "0.2.0",
+  "description": "Windows desktop client for Black Hole Bin",
+  "type": "module",
+  "scripts": {
+    "prepare:renderer": "node scripts/prepare-renderer.mjs",
+    "dev": "npm run prepare:renderer && vite",
+    "build": "npm run prepare:renderer && vite build",
+    "check:web": "npm run prepare:renderer && node --check src/main.js && vite build",
+    "check": "npm run check:web && cargo fmt --manifest-path src-tauri/Cargo.toml -- --check && cargo test --manifest-path src-tauri/Cargo.toml",
+    "tauri": "tauri"
+  },
+  "dependencies": {
+    "@tauri-apps/api": "2.11.1"
+  },
+  "devDependencies": {
+    "@tauri-apps/cli": "2.11.4",
+    "vite": "8.1.5"
+  }
+}

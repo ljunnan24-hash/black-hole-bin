@@ -1,26 +1,28 @@
 # Black Hole Bin
 
 [![CI](https://github.com/ljunnan24-hash/black-hole-bin/actions/workflows/ci.yml/badge.svg)](https://github.com/ljunnan24-hash/black-hole-bin/actions/workflows/ci.yml)
+[![Windows](https://github.com/ljunnan24-hash/black-hole-bin/actions/workflows/windows.yml/badge.svg)](https://github.com/ljunnan24-hash/black-hole-bin/actions/workflows/windows.yml)
 [![macOS 13+](https://img.shields.io/badge/macOS-13%2B-111111?logo=apple)](https://github.com/ljunnan24-hash/black-hole-bin)
 [![Swift 6](https://img.shields.io/badge/Swift-6-F05138?logo=swift&logoColor=white)](Package.swift)
-[![Windows planned](https://img.shields.io/badge/Windows-planned-0078D4?logo=windows11&logoColor=white)](ROADMAP.md)
+[![Windows 10/11](https://img.shields.io/badge/Windows-10%2F11-0078D4?logo=windows11&logoColor=white)](windows/README.md)
 [![MIT](https://img.shields.io/badge/License-MIT-2ea44f.svg)](LICENSE)
 
 ## 中文简介
 
-黑洞垃圾箱是一款原生 macOS 桌面工具。把 Finder 中的文件或文件夹拖到黑洞上，
-松手后会播放螺旋吸入动画，并将文件安全地移入系统废纸篓；支持撤销上一次投放，
-不会直接永久删除文件。
+黑洞垃圾箱是一款支持 macOS 和 Windows 的开源桌面工具。把文件或文件夹拖到黑洞
+上，松手后会播放螺旋吸入动画，并将文件安全地移入系统废纸篓或回收站，不会直接
+永久删除文件。
 
-- **当前可用平台：** macOS 13 或更高版本
-- **Windows 版：** 目前没有，已列入后续规划，暂未确定发布日期
-- **当前安装方式：** 从源码一键构建并安装；签名、公证安装包仍在准备中
+- **macOS：** macOS 13 或更高版本，原生 AppKit 客户端
+- **Windows：** Windows 10 1803 或更高版本、Windows 11，提供 x64 和 ARM64 客户端
+- **当前状态：** `0.2` 跨平台预览版；Windows 安装包由 GitHub Actions 自动构建，
+  暂未购买代码签名证书
 
 [查看完整简体中文安装和使用说明 →](README.zh-CN.md)
 
-Drag a file or folder from Finder onto a gravitationally lensed black hole.
-Release it to spiral the item into the event horizon and safely move it to the
-macOS Trash.
+Drag a file or folder onto a gravitationally lensed black hole. Release it to
+spiral the item into the event horizon and safely move it to the macOS Trash or
+Windows Recycle Bin.
 
 <p align="center">
   <img src="docs/demo.gif" width="420" alt="Black Hole Bin idle, file-hover and real recycle animation">
@@ -29,15 +31,35 @@ macOS Trash.
 The recording shows the real three-state flow: idle → file hover → release,
 suction and confirmed move to Trash. It uses one disposable text file.
 
-> **Current status: 0.1 preview for macOS only.** You can install from source
-> today. A signed and notarized download for non-developers is not available
-> yet; this project will not distribute an untrusted prebuilt app in its place.
-> **There is no Windows build yet.** Windows support is on the roadmap without
-> a release date.
+> **Current status: 0.2 cross-platform preview.** macOS 13+ and Windows
+> 10 1803+/11 are supported. Windows x64 and ARM64 installers are built in a
+> public GitHub Actions workflow. They are reproducible but currently unsigned,
+> so Windows may show a SmartScreen reputation warning.
 
 ## Install
 
-### One-command local source install
+### Windows 10/11
+
+Open the official
+[Releases page](https://github.com/ljunnan24-hash/black-hole-bin/releases) and
+download the installer for your device:
+
+- Most Intel/AMD PCs: `Black.Hole.Bin_*_x64-setup.exe`
+- Windows on ARM: `Black.Hole.Bin_*_arm64-setup.exe`
+- An x64 `.msi` is also published for managed or alternative installation
+
+Run the installer as the current user; administrator access is not required.
+The app uses the WebView2 runtime already included with supported Windows
+versions. Because this preview is not yet code-signed, do not download it from
+mirrors. If your security policy blocks unsigned software, build from the
+auditable source or wait for a signed release instead of weakening system-wide
+security settings.
+
+To uninstall, open **Settings → Apps → Installed apps → Black Hole Bin**. Files
+already in the Recycle Bin are not affected. For a source build, see
+[windows/README.md](windows/README.md).
+
+### macOS one-command source install
 
 You need macOS 13 or newer and Swift 6 from Xcode 16 or compatible Command Line
 Tools. If `swift` is not available in Terminal, run `xcode-select --install`
@@ -77,14 +99,14 @@ To uninstall, quit the app, run `open "$HOME/Applications"` and move
 
 ## Use
 
-1. Launching the app does not open a conventional window. A floating black hole
-   appears near the lower-right of the main display, with controls in the menu bar.
-2. Drag a file or folder from **Finder** onto the black hole. Gravity rings and
-   a release hint appear when the item is over a valid drop area.
+1. Launching the app shows a floating black hole instead of a conventional
+   application window.
+2. Drag a file or folder from **Finder** or **File Explorer** onto the black
+   hole. Gravity rings and a release hint appear over a valid drop area.
 3. Release over the black hole. The icon is pulled in, then the original item
-   moves to the system Trash.
-4. To restore it, immediately choose **Undo Last Drop** from the menu-bar item
-   or the black hole's right-click menu.
+   moves to the system Trash or Recycle Bin.
+4. On macOS, choose **Undo Last Drop** from the menu-bar item or right-click
+   menu. On Windows, open the Recycle Bin and choose **Restore**.
 5. Drag the black hole itself to reposition it; the app remembers the location.
 
 Double-clicking the black hole plays the harmless preview shown above and moves
@@ -93,9 +115,13 @@ starts after a valid file drop or double-click preview.
 
 ## Safety model
 
-- Successful drops call `NSWorkspace.recycle`; there is no permanent-delete path.
-- Only the latest successful batch is retained in memory for undo. That undo
-  record disappears when the app exits.
+- macOS drops call `NSWorkspace.recycle`; Windows drops use the system Recycle
+  Bin through the MIT-licensed `trash` Rust crate. Neither client has a
+  permanent-delete path.
+- macOS retains the latest successful batch in memory for one-click undo.
+  Windows uses the Recycle Bin's standard **Restore** action in this preview.
+- Windows validates the entire batch first, rejects roots/relative/missing
+  paths, removes nested duplicates and caps a drop at 128 paths.
 - The app does not request Full Disk Access or install a privileged helper.
 - There are no network requests, accounts, analytics or cloud rendering.
 - The renderer loads only bundled local HTML and GLSL.
@@ -106,34 +132,34 @@ responsible for final Trash deletion.
 
 ## Highlights
 
-- Native AppKit menu-bar utility and transparent borderless floating panel
+- Native AppKit macOS client and compact Tauri/WebView2 Windows client
 - WebGL2 geodesic ray tracing, accretion disk and gravitational lensing
 - Hover, gravity-ring, staggered multi-file suction and status animations
-- File/folder recycle with one-batch undo
+- File/folder recycle on both platforms; one-batch undo on macOS
 - All-Spaces visibility, always-on-top, position memory and reduced motion
-- No third-party runtime dependencies
+- Local-only renderer with no accounts, analytics or cloud dependency
 
 ## Windows
 
-A Windows version is planned for exploration, with no release date yet. The
-current app depends on AppKit, `WKWebView` and `NSWorkspace.recycle`, so it
-cannot be compiled directly for Windows. The intended direction is to preserve
-the WebGL visual and interaction states while adding a native Windows desktop
-shell, WebView2 and the Windows Recycle Bin API—without weakening the
-no-permanent-delete and undo guarantees. See [ROADMAP.md](ROADMAP.md).
+The Windows preview lives in [`windows/`](windows/README.md). It uses Tauri 2
+for a small native shell, the system WebView2 runtime, the same HTML/GLSL
+renderer as macOS, and a Rust backend for validated Recycle Bin operations.
+GitHub Actions builds an NSIS installer for x64 and ARM64 plus an x64 MSI on
+every `main` commit. Version tags publish those installers to GitHub Releases.
 
-Contributors with WinUI, WebView2, Windows Shell or cross-platform desktop
-experience are welcome to help shape the design before implementation begins.
+Current Windows gaps are documented rather than hidden: installers are not yet
+code-signed, in-app undo is not implemented, and startup-at-login needs design
+and user consent. See [ROADMAP.md](ROADMAP.md).
 
 ## Architecture
 
 | Component | Responsibility |
 | --- | --- |
-| `BlackHolePanel` | Transparent non-activating panel and position persistence |
-| `BlackHoleView` | Pointer/drag state, native overlays and icon animation |
-| `BlackHoleWebRenderer` | Local `WKWebView` bridge and WebGL2 lifecycle |
-| `blackhole.glsl` | Geodesic tracing, accretion disk and interaction uniforms |
-| `TrashController` | Recycle and one-batch undo |
+| `Sources/BlackHoleBin` | Native AppKit shell, drag/drop and macOS undo |
+| `windows/src` | Windows drag state, overlays, localization and icon animation |
+| `windows/src-tauri` | Validated Windows Recycle Bin commands and native window |
+| `blackhole.html` / `blackhole.glsl` | Shared WebGL2 renderer and interaction contract |
+| Windows workflow | Reproducible x64/ARM64 checks, installers and tagged releases |
 
 The app combines AppKit drag callbacks with a system drag-pasteboard fallback.
 This supports Finder sources that expose different drag-operation masks while
@@ -156,6 +182,6 @@ complete upstream attribution.
 ## Contributing
 
 Read [CONTRIBUTING.md](CONTRIBUTING.md) and [ROADMAP.md](ROADMAP.md) first.
-Drag/drop reports should include the macOS version, Mac model, source
-application and whether both hover and release phases appeared. Report
-security issues privately as described in [SECURITY.md](SECURITY.md).
+Drag/drop reports should include the OS version, device/architecture, source
+application and whether both hover and release phases appeared. Report security
+issues privately as described in [SECURITY.md](SECURITY.md).

@@ -1,0 +1,60 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="color-scheme" content="dark">
+    <title>Black Hole Bin</title>
+    <link rel="stylesheet" href="/src/styles.css">
+    <script type="module" src="/src/main.js"></script>
+  </head>
+  <body>
+    <main id="app" aria-label="Black Hole Bin">
+      <iframe
+        id="renderer"
+        title="Animated black hole"
+        src="/renderer/blackhole.html"
+        tabindex="-1"
+        aria-hidden="true"
+      ></iframe>
+
+      <div id="attraction-rings" aria-hidden="true">
+        <span></span>
+        <span></span>
+      </div>
+
+      <section
+        id="drop-zone"
+        role="button"
+        tabindex="0"
+        aria-describedby="drop-hint"
+      >
+        <span class="sr-only" id="drop-accessible-name">Drop files into the Recycle Bin</span>
+      </section>
+
+      <button id="drag-handle" type="button" aria-label="Move Black Hole Bin">
+        <span></span><span></span><span></span>
+      </button>
+
+      <button id="menu-button" type="button" aria-label="Open menu" aria-expanded="false">
+        <span></span><span></span><span></span>
+      </button>
+
+      <div id="drop-hint" class="hint" aria-hidden="true">Release to recycle</div>
+      <div id="status" class="status" role="status" aria-live="polite"></div>
+      <div id="particles" aria-hidden="true"></div>
+
+      <nav id="context-menu" class="menu" aria-label="Black Hole Bin menu" hidden>
+        <button type="button" data-action="recycle-bin">Open Recycle Bin</button>
+        <button type="button" data-action="always-on-top" role="menuitemcheckbox" aria-checked="true">
+          <span>Always on top</span><span class="check">✓</span>
+        </button>
+        <button type="button" data-action="reduce-motion" role="menuitemcheckbox" aria-checked="false">
+          <span>Reduce motion</span><span class="check">✓</span>
+        </button>
+        <div class="separator"></div>
+        <button type="button" data-action="quit">Quit</button>
+      </nav>
+    </main>
+  </body>
+</html>

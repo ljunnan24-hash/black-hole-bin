@@ -1,0 +1,25 @@
+version: 2
+updates:
+  - package-ecosystem: npm
+    directory: /windows
+    schedule:
+      interval: weekly
+    groups:
+      tauri-frontend:
+        patterns:
+          - "@tauri-apps/*"
+          - "vite"
+
+  - package-ecosystem: cargo
+    directory: /windows/src-tauri
+    schedule:
+      interval: weekly
+    groups:
+      tauri-backend:
+        patterns:
+          - "tauri*"
+
+  - package-ecosystem: github-actions
+    directory: /
+    schedule:
+      interval: weekly

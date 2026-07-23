@@ -7,25 +7,28 @@ body:
     attributes:
       value: |
         Use a disposable file when reproducing drag/drop problems.
-  - type: input
-    id: macos
+  - type: dropdown
+    id: platform
     attributes:
-      label: macOS version
-      placeholder: macOS 15.5
+      label: Platform
+      options:
+        - macOS
+        - Windows x64
+        - Windows ARM64
     validations:
       required: true
   - type: input
-    id: hardware
+    id: os
     attributes:
-      label: Mac model
-      placeholder: MacBook Air M3
+      label: OS version and device
+      placeholder: Windows 11 24H2, Surface Laptop 7 / macOS 15.5, MacBook Air M3
     validations:
       required: true
   - type: input
     id: source
     attributes:
       label: Drag source
-      description: Finder, Desktop, iCloud Drive, network volume, another app, etc.
+      description: Finder, File Explorer, Desktop, cloud drive, network volume, another app, etc.
     validations:
       required: true
   - type: dropdown
