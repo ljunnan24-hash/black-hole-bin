@@ -31,8 +31,8 @@
 [Releases 页面](https://github.com/ljunnan24-hash/black-hole-bin/releases)，
 按设备下载：
 
-- 常见 Intel/AMD 电脑：`Black Hole Bin_*_x64-setup.exe`
-- Windows on ARM 设备：`Black Hole Bin_*_arm64-setup.exe`
+- 常见 Intel/AMD 电脑：`Black.Hole.Bin_*_x64-setup.exe`
+- Windows on ARM 设备：`Black.Hole.Bin_*_arm64-setup.exe`
 - x64 还提供 `.msi`，供企业管理或备用安装
 
 安装器按当前用户安装，不需要管理员权限。受支持的 Windows 已自带 WebView2

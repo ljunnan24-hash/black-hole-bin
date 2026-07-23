@@ -4,6 +4,11 @@ on:
   push:
     branches: [main]
     tags: ["v*"]
+    paths:
+      - ".github/workflows/windows.yml"
+      - "windows/**"
+      - "Sources/BlackHoleBin/Resources/**"
+      - "LICENSE"
   pull_request:
   workflow_dispatch:
 
@@ -35,7 +40,7 @@ jobs:
     steps:
       - uses: actions/checkout@v7
 
-      - uses: actions/setup-node@v6
+      - uses: actions/setup-node@v7
         with:
           node-version: 24
           cache: npm
