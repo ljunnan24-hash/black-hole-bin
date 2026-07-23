@@ -2,6 +2,11 @@
 
 Thanks for helping improve Black Hole Bin.
 
+All participation is governed by [CODE_OF_CONDUCT.md](CODE_OF_CONDUCT.md).
+Questions and early ideas belong in
+[GitHub Discussions](https://github.com/ljunnan24-hash/black-hole-bin/discussions);
+reproducible problems belong in Issues.
+
 ## Before opening an issue
 
 - Confirm the problem still occurs on the latest `main`.
@@ -39,6 +44,10 @@ npm run tauri dev
 
 The macOS client has no external packages. Windows dependencies are locked in
 `package-lock.json` and `Cargo.lock` and updated by Dependabot.
+
+Real Windows device testing is tracked separately from automated compilation.
+Follow [docs/WINDOWS_TESTING.md](docs/WINDOWS_TESTING.md) and submit the
+structured hardware-test form so results remain comparable across devices.
 
 ## Pull requests
 

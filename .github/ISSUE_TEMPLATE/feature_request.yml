@@ -1,0 +1,42 @@
+name: Feature request
+description: Propose a focused improvement to Black Hole Bin
+title: "[Feature]: "
+labels: ["enhancement"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Please check Discussions and existing issues before proposing a duplicate.
+        Permanent deletion, cloud accounts and privileged helpers are out of scope.
+  - type: dropdown
+    id: platform
+    attributes:
+      label: Platform
+      options:
+        - Both platforms
+        - macOS
+        - Windows
+        - Project or documentation
+    validations:
+      required: true
+  - type: textarea
+    id: problem
+    attributes:
+      label: Problem
+      description: What user problem would this solve?
+    validations:
+      required: true
+  - type: textarea
+    id: proposal
+    attributes:
+      label: Proposed behavior
+      description: Describe the smallest useful change and any alternatives.
+    validations:
+      required: true
+  - type: textarea
+    id: safety
+    attributes:
+      label: File-safety impact
+      description: Explain any effect on recycle, restore, path handling or permissions.
+    validations:
+      required: true

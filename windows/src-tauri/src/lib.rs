@@ -145,6 +145,51 @@ mod tests {
     }
 
     #[test]
+    fn rejects_batches_over_the_limit_before_touching_the_filesystem() {
+        let paths = (0..=MAX_DROP_ITEMS)
+            .map(|index| format!("relative-{index}"))
+            .collect();
+        let error = validate_paths(paths).expect_err("oversized batches must fail");
+        assert!(error.contains("limited"));
+    }
+
+    #[test]
+    fn rejects_missing_absolute_paths() {
+        let missing = std::env::temp_dir().join(format!(
+            "black-hole-bin-missing-{}-{}",
+            std::process::id(),
+            u128::from(
+                std::time::SystemTime::now()
+                    .duration_since(std::time::UNIX_EPOCH)
+                    .expect("clock should be after Unix epoch")
+                    .subsec_nanos()
+            )
+        ));
+        let result = validate_paths(vec![missing.to_string_lossy().into_owned()]);
+        assert!(result.is_err());
+    }
+
+    #[test]
+    fn deduplicates_the_same_existing_path() {
+        let executable = std::env::current_exe().expect("test executable must exist");
+        let raw = executable.to_string_lossy().into_owned();
+        let result = validate_paths(vec![raw.clone(), raw]).expect("path should validate");
+        assert_eq!(result.len(), 1);
+    }
+
+    #[test]
+    fn removes_a_nested_path_when_its_existing_parent_is_present() {
+        let manifest_directory = PathBuf::from(env!("CARGO_MANIFEST_DIR"));
+        let manifest = manifest_directory.join("Cargo.toml");
+        let result = validate_paths(vec![
+            manifest.to_string_lossy().into_owned(),
+            manifest_directory.to_string_lossy().into_owned(),
+        ])
+        .expect("existing paths should validate");
+        assert_eq!(result, vec![manifest_directory]);
+    }
+
+    #[test]
     fn rejects_filesystem_root() {
         let root = if cfg!(target_os = "windows") {
             r"C:\"

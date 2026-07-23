@@ -1,0 +1,72 @@
+name: Windows hardware test
+description: Report the Windows smoke-test checklist from a real PC or VM
+title: "[Windows test]: "
+labels: ["testing", "windows"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thank you for testing a real Windows environment.
+        Use only disposable files and remove private paths from screenshots or logs.
+        Follow docs/WINDOWS_TESTING.md before submitting this report.
+  - type: dropdown
+    id: architecture
+    attributes:
+      label: Architecture
+      options:
+        - x64
+        - ARM64
+    validations:
+      required: true
+  - type: input
+    id: windows
+    attributes:
+      label: Windows version
+      placeholder: Windows 11 24H2, OS build 26100.x
+    validations:
+      required: true
+  - type: input
+    id: device
+    attributes:
+      label: Device or VM
+      placeholder: Surface Laptop 7 / desktop with Ryzen 7 / Parallels VM
+    validations:
+      required: true
+  - type: dropdown
+    id: installer
+    attributes:
+      label: Installer
+      options:
+        - x64 NSIS EXE
+        - x64 MSI
+        - ARM64 NSIS EXE
+        - Source build
+    validations:
+      required: true
+  - type: checkboxes
+    id: required_checks
+    attributes:
+      label: Required smoke tests
+      options:
+        - label: Installer completed
+        - label: Floating black hole appeared
+        - label: Pointer hover and attraction rings appeared
+        - label: Double-click preview moved no file
+        - label: Disposable file entered the Recycle Bin exactly once
+        - label: Recycle Bin Restore returned the file
+        - label: Disposable folder entered the Recycle Bin and restored
+        - label: Chinese or space-containing filename recycled and restored
+        - label: Settings and Open Recycle Bin worked
+        - label: Uninstall completed without changing Recycle Bin contents
+  - type: textarea
+    id: result
+    attributes:
+      label: Result and failures
+      description: Mark untested items and describe any failure precisely.
+    validations:
+      required: true
+  - type: textarea
+    id: evidence
+    attributes:
+      label: Non-private evidence
+      description: Optional screenshots, logs or WebView2 version. Remove private paths.

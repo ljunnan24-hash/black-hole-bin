@@ -22,6 +22,10 @@
 > **当前状态：0.2 跨平台预览版。** 支持 macOS 13 或更高版本，以及 Windows 10
 > 1803 或更高版本、Windows 11。Windows 提供 x64 与 ARM64 安装包，构建过程完全
 > 公开；目前还没有商业代码签名证书，Windows 可能显示 SmartScreen 信誉提示。
+>
+> **正在征集 Windows 实机测试。** x64、ARM64 用户可按
+> [实机测试清单](docs/WINDOWS_TESTING.md)验证安装、拖放、还原和卸载，并提交结构化
+> 结果。
 
 ## 安装
 
@@ -125,7 +129,9 @@ Windows 客户端位于 [`windows/`](windows/README.md)。它使用 Tauri 2 作�
 ARM64 NSIS 安装器和 x64 MSI；打版本标签后会自动发布到 GitHub Releases。
 
 当前差距也会明确公开：安装包尚未代码签名、Windows 端暂时没有应用内一键撤销、
-开机启动仍需要完整设计和明确的用户授权。后续工作见 [ROADMAP.md](ROADMAP.md)。
+开机启动仍需要完整设计和明确的用户授权。实体 Windows 设备可按
+[实机测试清单](docs/WINDOWS_TESTING.md)提交可核查结果；后续工作见
+[ROADMAP.md](ROADMAP.md)。
 
 ## 项目结构
 
@@ -151,6 +157,7 @@ ARM64 NSIS 安装器和 x64 MSI；打版本标签后会自动发布到 GitHub Re
 
 ## 参与贡献
 
-请先阅读 [CONTRIBUTING.md](CONTRIBUTING.md) 和 [ROADMAP.md](ROADMAP.md)。
+请先阅读 [CONTRIBUTING.md](CONTRIBUTING.md)、[SUPPORT.md](SUPPORT.md) 和
+[ROADMAP.md](ROADMAP.md)。
 报告拖放问题时，请附上系统版本、设备与 CPU 架构、文件来源应用，以及悬停和松手
 两个阶段分别是否出现。安全问题请按 [SECURITY.md](SECURITY.md) 私下报告。

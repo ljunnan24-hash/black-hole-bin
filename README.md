@@ -17,6 +17,8 @@
 - **Windows：** Windows 10 1803 或更高版本、Windows 11，提供 x64 和 ARM64 客户端
 - **当前状态：** `0.2` 跨平台预览版；Windows 安装包由 GitHub Actions 自动构建，
   暂未购买代码签名证书
+- **实机测试：** 正在征集 Windows x64、ARM64 实机结果，测试清单见
+  [`docs/WINDOWS_TESTING.md`](docs/WINDOWS_TESTING.md)
 
 [查看完整简体中文安装和使用说明 →](README.zh-CN.md)
 
@@ -149,7 +151,9 @@ every `main` commit. Version tags publish those installers to GitHub Releases.
 
 Current Windows gaps are documented rather than hidden: installers are not yet
 code-signed, in-app undo is not implemented, and startup-at-login needs design
-and user consent. See [ROADMAP.md](ROADMAP.md).
+and user consent. Real-device testers can follow the auditable
+[Windows smoke-test checklist](docs/WINDOWS_TESTING.md). See
+[ROADMAP.md](ROADMAP.md) for the remaining work.
 
 ## Architecture
 
@@ -181,7 +185,8 @@ complete upstream attribution.
 
 ## Contributing
 
-Read [CONTRIBUTING.md](CONTRIBUTING.md) and [ROADMAP.md](ROADMAP.md) first.
+Read [CONTRIBUTING.md](CONTRIBUTING.md), [SUPPORT.md](SUPPORT.md) and
+[ROADMAP.md](ROADMAP.md) first.
 Drag/drop reports should include the OS version, device/architecture, source
 application and whether both hover and release phases appeared. Report security
 issues privately as described in [SECURITY.md](SECURITY.md).

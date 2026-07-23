@@ -19,7 +19,8 @@ after testing and community feedback.
 - Publish a versioned `.dmg` or `.zip` with SHA-256 checksums.
 - Sign Windows installers to remove the unknown-publisher/SmartScreen warning.
 - Add one-click Windows undo without adding a permanent-delete path.
-- Test x64 and ARM64 installers on clean Windows 10 and Windows 11 machines.
+- Collect the clean-machine x64 and ARM64 evidence defined in
+  [docs/WINDOWS_TESTING.md](docs/WINDOWS_TESTING.md).
 - Add an in-app update strategy only after the release channel is trusted.
 
 The Windows shell is implemented with Tauri 2 and WebView2, while macOS remains
