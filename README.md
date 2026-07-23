@@ -3,9 +3,20 @@
 [![CI](https://github.com/ljunnan24-hash/black-hole-bin/actions/workflows/ci.yml/badge.svg)](https://github.com/ljunnan24-hash/black-hole-bin/actions/workflows/ci.yml)
 [![macOS 13+](https://img.shields.io/badge/macOS-13%2B-111111?logo=apple)](https://github.com/ljunnan24-hash/black-hole-bin)
 [![Swift 6](https://img.shields.io/badge/Swift-6-F05138?logo=swift&logoColor=white)](Package.swift)
+[![Windows planned](https://img.shields.io/badge/Windows-planned-0078D4?logo=windows11&logoColor=white)](ROADMAP.md)
 [![MIT](https://img.shields.io/badge/License-MIT-2ea44f.svg)](LICENSE)
 
-[简体中文](README.zh-CN.md)
+## 中文简介
+
+黑洞垃圾箱是一款原生 macOS 桌面工具。把 Finder 中的文件或文件夹拖到黑洞上，
+松手后会播放螺旋吸入动画，并将文件安全地移入系统废纸篓；支持撤销上一次投放，
+不会直接永久删除文件。
+
+- **当前可用平台：** macOS 13 或更高版本
+- **Windows 版：** 目前没有，已列入后续规划，暂未确定发布日期
+- **当前安装方式：** 从源码一键构建并安装；签名、公证安装包仍在准备中
+
+[查看完整简体中文安装和使用说明 →](README.zh-CN.md)
 
 Drag a file or folder from Finder onto a gravitationally lensed black hole.
 Release it to spiral the item into the event horizon and safely move it to the
@@ -21,6 +32,8 @@ suction and confirmed move to Trash. It uses one disposable text file.
 > **Current status: 0.1 preview for macOS only.** You can install from source
 > today. A signed and notarized download for non-developers is not available
 > yet; this project will not distribute an untrusted prebuilt app in its place.
+> **There is no Windows build yet.** Windows support is on the roadmap without
+> a release date.
 
 ## Install
 

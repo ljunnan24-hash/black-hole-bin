@@ -3,6 +3,7 @@
 [![CI](https://github.com/ljunnan24-hash/black-hole-bin/actions/workflows/ci.yml/badge.svg)](https://github.com/ljunnan24-hash/black-hole-bin/actions/workflows/ci.yml)
 [![macOS 13+](https://img.shields.io/badge/macOS-13%2B-111111?logo=apple)](https://github.com/ljunnan24-hash/black-hole-bin)
 [![Swift 6](https://img.shields.io/badge/Swift-6-F05138?logo=swift&logoColor=white)](Package.swift)
+[![Windows planned](https://img.shields.io/badge/Windows-planned-0078D4?logo=windows11&logoColor=white)](ROADMAP.md)
 [![MIT](https://img.shields.io/badge/License-MIT-2ea44f.svg)](LICENSE)
 
 [English](README.md)
@@ -20,6 +21,9 @@
 > **当前状态：0.1 预览版，仅支持 macOS。** 现在可以从源码安装。面向普通用户的
 > 签名、公证下载包尚未发布；在 Apple Developer ID 签名和公证完成前，本项目不会
 > 提供来路不明的预编译程序。
+>
+> **目前没有 Windows 版。** Windows 已列入后续规划，计划复用 WebGL 黑洞渲染，
+> 配合 Windows 原生桌面外壳、WebView2 和系统回收站接口；暂未确定发布日期。
 
 ## 安装
 
